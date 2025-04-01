@@ -21,7 +21,7 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
 
-    "types": ["vitest/jsdom", "jest", "vite-plugin-arraybuffer/types"]
+    "types": ["vitest/jsdom", "jest"]
   },
   "include": ["**/*.ts", "**/*.tsx", "src/**/*", "./setupTests.ts"],
   "exclude": ["node_modules"],
