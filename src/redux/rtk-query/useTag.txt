@@ -1,0 +1,19 @@
+import { traceCoApi } from '../baseUrl';
+
+// ----------------------------------------------------------------------
+
+export const xxxx = traceCoApi.enhanceEndpoints({ addTagTypes: [xxxx] }).injectEndpoints({
+  endpoints: (builder) => ({
+    xxxx: builder.xxxx<xxxx, xxxx>({
+      query: (xxxx) => ({
+        url: `xxxx`,
+        method: 'xxxx',
+        body : xxxx
+      }),
+    }),
+  }),
+
+  overrideExisting: true,
+});
+
+export const { xxxx } = authApi;

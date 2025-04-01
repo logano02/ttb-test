@@ -1,10 +1,22 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import "./index.css";
+import { Suspense } from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
+
 import App from "./App";
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
+// ----------------------------------------------------------------------
+
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+
+root.render(
+  <HelmetProvider>
+    <BrowserRouter basename={""}>
+      <Suspense>
+        <App />
+      </Suspense>
+    </BrowserRouter>
+  </HelmetProvider>
 );

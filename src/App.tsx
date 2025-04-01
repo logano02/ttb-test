@@ -1,16 +1,18 @@
 import "./App.css";
-import Confirm from "./pages/confirm";
-import { Outlet } from "@mui/icons-material";
-import { Box } from "@mui/material";
+import { Router } from "./routes/sections/";
+import { AuthProvider } from ".//auth/context/jwt";
+import { Provider as ReduxProvider } from "react-redux";
+
+import { store } from "./redux/store";
 
 function App() {
   return (
-    <>
-      <Outlet />
-      <Box width={"100%"}>
-        <Confirm />
-      </Box>
-    </>
+    <ReduxProvider store={store}>
+      <AuthProvider>
+        {/* your app content here */}
+        <Router />
+      </AuthProvider>
+    </ReduxProvider>
   );
 }
 
