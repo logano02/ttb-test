@@ -1,27 +1,25 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { CONFIG } from '../../config-global';
+import { CONFIG } from "../../config-global";
 
 // ----------------------------------------------------------------------
 
-const STORAGE_KEY = 'accessToken';
-const UID = 'uid';
+const STORAGE_KEY = "accessToken";
 const accessToken = localStorage.getItem(STORAGE_KEY);
-const uid = localStorage.getItem(UID);
 
 // ----------------------------------------------------------------------
 
-export const traceCoApi = createApi({
-  reducerPath: 'api',
+export const ttbApi = createApi({
+  reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: CONFIG.site.hostApi,
 
     prepareHeaders: (headers: Headers, { getState }: { getState: any }) => {
       const token = getState().auth.token || accessToken;
 
-      if (token && uid) {
-        headers.set('authorization', `Bearer ${token}`);
-        headers.set('X-USER-ID', uid);
+      if (token) {
+        headers.set("authorization", `Bearer ${token}`);
       }
 
       return headers;

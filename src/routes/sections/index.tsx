@@ -24,9 +24,6 @@ export function Router() {
     // Main
     ...mainRoutes,
 
-    // Components
-    // ...componentsRoutes,
-
     // No match
     { path: "*", element: <Navigate to="/404" replace /> },
   ]);

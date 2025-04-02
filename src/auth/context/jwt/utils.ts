@@ -1,8 +1,9 @@
+import { JwtPayload } from "jwt-decode";
 import { paths } from "../../../routes/paths";
 
 import axios from "../../../utils/axios";
 
-import { UID, STORAGE_KEY } from "./constant";
+import { STORAGE_KEY } from "./constant";
 
 // ----------------------------------------------------------------------
 
@@ -69,30 +70,24 @@ export function tokenExpired(exp: number) {
 
 // ----------------------------------------------------------------------
 
-export async function setSession(
-  accessToken: string | null,
-  adminId: string | null
-) {
+export async function setSession(credentialToken: string | null) {
   try {
-    if (accessToken && adminId) {
-      localStorage.setItem(STORAGE_KEY, accessToken);
-      localStorage.setItem(UID, adminId);
+    if (credentialToken) {
+      const credentials: JwtPayload = jwtDecode(credentialToken);
+      const currentTime = Date.now() / 1000;
 
-      // TODO: not use because accessToken not JWT
-      // axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-      // const decodedToken = jwtDecode(accessToken);
-      // if (decodedToken && 'exp' in decodedToken) {
-      //   tokenExpired(decodedToken.exp);
-      // } else {
-      //   throw new Error('Invalid access token!');
-      // }
+      if (!credentials?.exp || credentials.exp < currentTime) removeToken();
+      else localStorage.setItem(STORAGE_KEY, credentialToken);
     } else {
-      localStorage.removeItem(STORAGE_KEY);
-      localStorage.removeItem(UID);
-      delete axios.defaults.headers.common.Authorization;
+      removeToken();
     }
   } catch (error) {
     console.error("Error during set session:", error);
     throw error;
   }
 }
+
+const removeToken = () => {
+  localStorage.removeItem(STORAGE_KEY);
+  delete axios.defaults.headers.common.Authorization;
+};

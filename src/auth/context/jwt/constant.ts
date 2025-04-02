@@ -1,2 +1,1 @@
-export const STORAGE_KEY = 'accessToken';
-export const UID = 'uid';
+export const STORAGE_KEY = "credentialToken";

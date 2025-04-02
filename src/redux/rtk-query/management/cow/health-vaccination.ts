@@ -1,4 +1,4 @@
-import { traceCoApi } from '../../baseUrl';
+import { ttbApi } from '../../baseUrl';
 
 import type {
   TGetHealthBody,
@@ -11,7 +11,7 @@ import type {
 
 // ----------------------------------------------------------------------
 
-export const healthVaccinationApi = traceCoApi
+export const healthVaccinationApi = ttbApi
   .enhanceEndpoints({
     addTagTypes: ['health', 'vaccination'],
   })

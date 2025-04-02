@@ -1,14 +1,21 @@
-import { useMemo, useEffect, useCallback } from 'react';
+import { useMemo, useEffect, useCallback } from "react";
 
-import { useSetState } from '../../../hooks/use-set-state';
+import { useSetState } from "../../../hooks/use-set-state";
 
-import { useLazyGetAdminByIdQuery } from '../../../redux/rtk-query/auth/auth';
+import { setSession } from "./utils";
+import { AuthContext } from "../auth-context";
+import { STORAGE_KEY } from "./constant";
 
-import { setSession } from './utils';
-import { AuthContext } from '../auth-context';
-import { UID, STORAGE_KEY } from './constant';
+import type { AuthState } from "../../types";
 
-import type { AuthState } from '../../types';
+import { jwtDecode, JwtPayload } from "jwt-decode";
+
+export type TLoginResponse =
+  | {
+      given_name: string;
+      email: string;
+      email_verified: boolean;
+    } & JwtPayload;
 
 // ----------------------------------------------------------------------
 
@@ -29,23 +36,14 @@ export function AuthProvider({ children }: Props) {
   });
 
   // --------------------------------------------------------------------
-  // api
-
-  const [getAdminById] = useLazyGetAdminByIdQuery();
-
-  // --------------------------------------------------------------------
 
   const checkUserSession = useCallback(async () => {
     try {
-      const accessToken = localStorage.getItem(STORAGE_KEY);
-      const userId = localStorage.getItem(UID);
-
-      if (accessToken) {
-        setSession(accessToken, userId);
-
-        const response = await getAdminById().unwrap();
-
-        setState({ user: { ...response, accessToken }, loading: false });
+      const token = localStorage.getItem(STORAGE_KEY);
+      if (token) {
+        setSession(token);
+        const resDecode: TLoginResponse = jwtDecode(token);
+        setState({ user: { ...resDecode }, loading: false });
       } else {
         setState({ user: null, loading: false });
       }
@@ -53,36 +51,39 @@ export function AuthProvider({ children }: Props) {
       console.error(error);
       setState({ user: null, loading: false });
     }
-  }, [setState, getAdminById]);
+  }, [setState]);
 
   // --------------------------------------------------------------------
 
   useEffect(() => {
     checkUserSession();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [checkUserSession]);
 
   // ----------------------------------------------------------------------
 
-  const checkAuthenticated = state.user ? 'authenticated' : 'unauthenticated';
+  const checkAuthenticated = state.user ? "authenticated" : "unauthenticated";
 
-  const status = state.loading ? 'loading' : checkAuthenticated;
+  const status = state.loading ? "loading" : checkAuthenticated;
 
   const memoizedValue = useMemo(
     () => ({
       user: state.user
         ? {
             ...state.user,
-            role: state.user?.role ?? 'admin',
+            role: "admin",
           }
         : null,
       checkUserSession,
-      loading: status === 'loading',
-      authenticated: status === 'authenticated',
-      unauthenticated: status === 'unauthenticated',
+      loading: status === "loading",
+      authenticated: status === "authenticated",
+      unauthenticated: status === "unauthenticated",
     }),
     [checkUserSession, state.user, status]
   );
 
-  return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={memoizedValue}>
+      {children}
+    </AuthContext.Provider>
+  );
 }

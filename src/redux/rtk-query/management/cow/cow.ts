@@ -1,4 +1,4 @@
-import { traceCoApi } from '../../baseUrl';
+import { ttbApi } from '../../baseUrl';
 
 import type {
   TCowDetail,
@@ -18,7 +18,7 @@ import type {
 
 // ----------------------------------------------------------------------
 
-export const cowApi = traceCoApi.enhanceEndpoints({ addTagTypes: ['cow'] }).injectEndpoints({
+export const cowApi = ttbApi.enhanceEndpoints({ addTagTypes: ['cow'] }).injectEndpoints({
   endpoints: (builder) => ({
     // Cow
     getCow: builder.query<TGetCowResponse, TGetCowBody>({
