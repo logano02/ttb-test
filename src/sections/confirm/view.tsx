@@ -21,14 +21,16 @@ const schema = Yup.object({
   name: Yup.string().required(),
   lastname: Yup.string().required(),
   idCard: Yup.string()
-    .matches(/^\d+$/, "Must be a number")
+    .matches(/^\d+$/, "หมายเลขบัตรประชาชน ต้องเป็นตัวเลขเท่านั้น")
     .length(13)
     .required(),
-  accountNo: Yup.string().matches(/^\d+$/, "Must be a number").required(),
+  accountNo: Yup.string()
+    .matches(/^\d+$/, "หมายเลขบัญชี ต้องเป็นตัวเลขเท่านั้น")
+    .required(),
   file: Yup.mixed<File>()
     .nullable()
     .required()
-    .test("is required", "File is required", (value) => {
+    .test("is required", "กรูณาอัปโหลดไฟล์", (value) => {
       if (value instanceof FileList) return false;
       else return true;
     }),
@@ -103,6 +105,7 @@ const ConfirmView = () => {
             <TextField
               {...register("name")}
               id="outlined-name"
+              data-testid="outlined-name"
               label="ชื่อ*"
               variant="outlined"
               fullWidth
@@ -115,6 +118,7 @@ const ConfirmView = () => {
             <TextField
               {...register("lastname")}
               id="outlined-lastname"
+              data-testid="outlined-lastname"
               label="นามสกุล*"
               variant="outlined"
               fullWidth
@@ -126,7 +130,7 @@ const ConfirmView = () => {
           <Grid size={{ xs: 4, sm: 4, md: 3 }}>
             <TextField
               {...register("idCard")}
-              id="outlined-id-card"
+              data-testid="outlined-id-card"
               label="หมายเลขบัตรประชาชน*"
               variant="outlined"
               fullWidth
@@ -138,6 +142,7 @@ const ConfirmView = () => {
           <Grid size={{ xs: 4, sm: 4, md: 3 }}>
             <TextField
               {...register("accountNo")}
+              data-testid="outlined-account-no"
               id="outlined-account-no"
               label="เลขบัญชี*"
               variant="outlined"
@@ -161,6 +166,7 @@ const ConfirmView = () => {
             <Box textAlign={"left"} mb={2}>
               <input
                 type="file"
+                data-testid="input-file"
                 {...register("file")}
                 id="outlined-file"
                 style={{ display: "none" }}
@@ -203,6 +209,7 @@ const ConfirmView = () => {
             variant="contained"
             color="primary"
             type="submit"
+            data-testid="submit-button"
             loading={isSubmitting}
           >
             บันทึกข้อมูล
