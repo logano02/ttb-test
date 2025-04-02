@@ -4,6 +4,7 @@ import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 
 import { signInSetSession } from "../../auth/context/jwt/action";
 import { useRouter } from "../../routes/hooks";
+import { toast, Toaster } from "sonner";
 
 function AuthSignInView() {
   const router = useRouter();
@@ -37,11 +38,14 @@ function AuthSignInView() {
     >
       <Box textAlign={"center"} display={"flex"} justifyContent={"center"}>
         <GoogleLogin
+          cancel_on_tap_outside
           onSuccess={(response: CredentialResponse) => {
+            toast.success("เข้าสู่ระบบสำเร็จ");
             signInSetSession(response.credential ?? "");
             router.refresh();
           }}
           onError={() => {
+            toast.error("เข้าสู่ระบบล้มเหลว");
             console.log("Login Failed");
           }}
           useOneTap
@@ -70,6 +74,11 @@ function AuthSignInView() {
           mt: 10,
         }}
       >
+        <Toaster
+          richColors
+          position="top-right"
+          toastOptions={{ duration: 3000 }}
+        />
         {renderHeader}
         {renderContent}
       </Container>
