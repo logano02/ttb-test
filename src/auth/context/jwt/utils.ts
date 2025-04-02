@@ -1,5 +1,4 @@
 import { JwtPayload } from "jwt-decode";
-import { paths } from "../../../routes/paths";
 
 import axios from "../../../utils/axios";
 
@@ -28,45 +27,6 @@ export function jwtDecode(token: string) {
 }
 
 // ----------------------------------------------------------------------
-
-export function isValidToken(accessToken: string) {
-  if (!accessToken) {
-    return false;
-  }
-
-  try {
-    const decoded = jwtDecode(accessToken);
-
-    if (!decoded || !("exp" in decoded)) {
-      return false;
-    }
-
-    const currentTime = Date.now() / 1000;
-
-    return decoded.exp > currentTime;
-  } catch (error) {
-    console.error("Error during token validation:", error);
-    return false;
-  }
-}
-
-// ----------------------------------------------------------------------
-
-export function tokenExpired(exp: number) {
-  const currentTime = Date.now();
-  const timeLeft = exp * 1000 - currentTime;
-
-  setTimeout(() => {
-    try {
-      alert("Token expired!");
-      localStorage.removeItem(STORAGE_KEY);
-      window.location.href = paths.auth.jwt.signIn;
-    } catch (error) {
-      console.error("Error during token expiration:", error);
-      throw error;
-    }
-  }, timeLeft);
-}
 
 // ----------------------------------------------------------------------
 

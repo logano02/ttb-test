@@ -14,6 +14,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { Toaster, toast } from "sonner";
 import { useRouter } from "../../routes/hooks";
+import { Logout } from "@mui/icons-material";
+import { STORAGE_KEY } from "../../auth/context/jwt/constant";
 
 const schema = Yup.object({
   name: Yup.string().required(),
@@ -68,13 +70,27 @@ const ConfirmView = () => {
     }, 3000);
   }, [router]);
 
+  const handleLogout = () => {
+    localStorage.removeItem(STORAGE_KEY);
+    router.refresh();
+  };
+
   return (
-    <Card sx={{ width: "100%", padding: "1rem 2rem 2rem 1 rem" }}>
+    <Card sx={{ padding: "4rem 5rem 2rem 1rem", margin: "2rem 0rem" }}>
       <Toaster
         richColors
         position="top-right"
         toastOptions={{ duration: 3000 }}
       />
+      <Box position={"absolute"} top={70} right={100}>
+        <Button
+          variant="contained"
+          startIcon={<Logout />}
+          onClick={() => handleLogout()}
+        >
+          ออกจากระบบ
+        </Button>
+      </Box>
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         {renderCategory("ข้อมูลส่วนบุคคล", "กรุณาระบุข้อมูลส่วนบุคคล")}
         <Grid
