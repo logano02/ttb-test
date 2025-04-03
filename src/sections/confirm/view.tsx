@@ -78,7 +78,7 @@ const ConfirmView = () => {
   };
 
   return (
-    <Card sx={{ padding: "4rem 5rem 2rem 1rem", margin: "2rem" }}>
+    <Card sx={{ padding: "4rem 2rem 2rem 2rem", margin: "2rem" }}>
       <Toaster
         richColors
         position="top-right"
